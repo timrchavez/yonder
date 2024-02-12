@@ -1,0 +1,29 @@
+[package]
+name = "user"
+version = "0.1.1"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dotenv = "0.15.0"
+envconfig = "0.10.0"
+jsonwebtoken = "9.2.0"
+reqwest = { version = "0.11.24", features = ["json"] }
+rocket = { version = "0.5.0", features = ["json"] }
+rocket_db_pools = { version = "0.1.0", features = ["sqlx_postgres"] }
+rocket_dyn_templates = { version = "0.1.0", features = ["handlebars"] }
+serde = { version = "1.0.195", featurs = ["json"] }
+sqlx = { version = "0.7.3", features = [
+    "postgres",
+    "runtime-tokio-rustls",
+    "macros",
+] }
+thiserror = "1.0.56"
+tokio = { version = "1.36.0", features = ["rt-multi-thread", "macros"] }
+uuid = { version = "1.7.0", features = [
+    "v4",
+    "fast-rng",
+    "macro-diagnostics",
+    "serde",
+] }

@@ -1,0 +1,16 @@
+services:
+  yonder-web:
+    build:
+      context: .
+    ports:
+      - 8081:8080
+    environment:
+      - ROCKET_PROFILE=debug
+      - ROCKET_OAUTH=${ROCKET_OAUTH}
+      - ROCKET_SECRET_KEY=${ROCKET_SECRET_KEY}
+      - RUST_BACKTRACE=1
+      - RUST_BACKTRACE=full
+      - GOOGLE_OAUTH_AUDIENCE=811729293433-pi6qatf18cm578lvtcei6qiqvs3ckb07.apps.googleusercontent.com
+      - GOOGLE_OAUTH_CERTS_ENDPOINT=https://www.googleapis.com/oauth2/v3/certs
+      - GOOGLE_OAUTH_TOKENINFO_ENDPOINT=https://www.googleapis.com/oauth2/v1/tokeninfo
+      - YONDER_JWT_SECRET="1d24b2a4-2d10-4687-b8d4-e30fea71e726"
