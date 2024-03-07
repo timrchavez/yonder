@@ -6,3 +6,14 @@
 // * We need a valid access token -- the User service will check for an expired Access token and return a 401
 // * We should have a request helper that autochecks the access token expiration and uses the refresh token before the access token expires and after receiving a 401, if necessary
 // * We should have a generic decorator that requires a valid access token (syntactic sugar) -- a Rocket validation?
+
+use serde::Deserialize;
+use uuid::Uuid;
+
+#[derive(Deserialize, Debug)]
+pub struct User {
+    pub id: Uuid,
+    pub given_name: String,
+    pub family_name: String,
+    pub groups: Vec<Uuid>,
+}

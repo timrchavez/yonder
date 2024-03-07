@@ -1,6 +1,5 @@
 use std::str::FromStr;
 
-use chrono::{Duration, Utc};
 use envconfig::Envconfig;
 use jsonwebtoken::{
     decode, decode_header, encode,
@@ -23,6 +22,8 @@ pub struct Config {
     google_oauth_audience: String,
     #[envconfig(from = "GOOGLE_OAUTH_CERTS_ENDPOINT")]
     google_oauth_jwks_endpoint: String,
+    #[envconfig(from = "USER_API_ENDPOINT")]
+    user_api_endpoint: String,
 }
 
 //const ACCESS_TOKEN_EXPIRY_WINDOW: i64 = 3600; // 6 minutes
@@ -144,14 +145,10 @@ impl Claims {
 }
 
 pub fn create_jwt(uid: String, email: String, exp: i64, secret: &str) -> Result<String, Error> {
-    let expiration = Utc::now()
-        .checked_add_signed(Duration::seconds(exp.to_owned()))
-        .expect("failed to create an expiration time")
-        .timestamp();
     let claims = Claims {
         sub: uid.to_string(),
         email: email.to_string(),
-        exp: expiration,
+        exp,
     };
 
     encode(

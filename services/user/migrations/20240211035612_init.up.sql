@@ -4,7 +4,7 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS public."User"
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    first_name text COLLATE pg_catalog."default" NOT NULL,
+    given_name text COLLATE pg_catalog."default" NOT NULL,
     family_name text COLLATE pg_catalog."default" NOT NULL,
     country text COLLATE pg_catalog."default" NOT NULL,
     is_superuser boolean NOT NULL DEFAULT false,

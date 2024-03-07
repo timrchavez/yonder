@@ -1,7 +1,10 @@
+use crate::api::SingleApiResponse;
 use crate::auth::Token;
+use crate::user::User;
 
 use anyhow::Error;
 use envconfig::Envconfig;
+use reqwest::header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE};
 use rocket::fairing::{AdHoc, Fairing};
 use rocket::http::{Cookie, CookieJar, SameSite, Status};
 use rocket::request;
@@ -108,6 +111,7 @@ pub async fn google_callback(
             .unwrap(),
         refresh_token: response.refresh_token().unwrap().to_string(),
     };
+    println!("access_token={:?}", tokens);
     cookies.add_private(
         Cookie::build(("auth-type", "google"))
             .same_site(SameSite::Lax)
@@ -123,6 +127,47 @@ pub async fn google_callback(
             .same_site(SameSite::Lax)
             .build(),
     );
+    let client = reqwest::Client::new();
+    let response = client
+        .get(config.user_api_endpoint)
+        .header(AUTHORIZATION, format!("Bearer {}", tokens.access_token))
+        .header(CONTENT_TYPE, "application/json")
+        .header(ACCEPT, "application/json")
+        .send()
+        .await
+        .unwrap();
+    match response.status() {
+        reqwest::StatusCode::OK => {
+            // on success, parse our JSON to an APIResponse
+            match response.json::<SingleApiResponse>().await {
+                Ok(parsed) => {
+                    cookies.remove_private("user-account");
+                    cookies.add_private(
+                        Cookie::build((
+                            "user-account",
+                            serde_json::to_string(&parsed.result).unwrap(),
+                        ))
+                        .same_site(SameSite::Lax)
+                        .build(),
+                    );
+                    if let Some(user_account) = cookies.get_private("user-account") {
+                        let user: User = serde_json::from_str(user_account.value()).unwrap();
+                        println!(
+                            "Success! User Name: {} {}",
+                            user.given_name, user.family_name
+                        );
+                    }
+                }
+                Err(e) => println!("API Error: {:?}", e),
+            };
+        }
+        reqwest::StatusCode::UNAUTHORIZED => {
+            println!("Need to grab a new token");
+        }
+        other => {
+            panic!("Uh oh! Something unexpected happened: {:?}", other);
+        }
+    };
     Ok(Redirect::to("/"))
 }
 

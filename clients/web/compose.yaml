@@ -1,5 +1,5 @@
 services:
-  yonder-web:
+  web:
     build:
       context: .
     ports:
@@ -13,4 +13,10 @@ services:
       - GOOGLE_OAUTH_AUDIENCE=811729293433-pi6qatf18cm578lvtcei6qiqvs3ckb07.apps.googleusercontent.com
       - GOOGLE_OAUTH_CERTS_ENDPOINT=https://www.googleapis.com/oauth2/v3/certs
       - GOOGLE_OAUTH_TOKENINFO_ENDPOINT=https://www.googleapis.com/oauth2/v1/tokeninfo
-      - YONDER_JWT_SECRET="1d24b2a4-2d10-4687-b8d4-e30fea71e726"
+      - YONDER_JWT_SECRET=${YONDER_JWT_SECRET}
+      - USER_API_ENDPOINT=http://user:8080/users/me
+    networks:
+      - app-net
+networks:
+  app-net:
+    driver: bridge

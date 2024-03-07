@@ -34,5 +34,5 @@ fn rocket() -> _ {
     rocket::build()
         .attach(db::UserDb::init())
         .attach(migrations)
-        .mount("/", routes![api::user_show_me, api::groups_list,])
+        .mount("/", routes![api::me_show, api::groups_list,])
 }

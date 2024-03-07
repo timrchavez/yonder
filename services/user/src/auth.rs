@@ -10,8 +10,6 @@ pub struct Claims {
     pub sub: String,
     pub email: String,
     pub exp: i64,
-    pub is_superuser: bool,
-    pub groups: Vec<String>,
 }
 
 #[derive(Debug, PartialEq)]

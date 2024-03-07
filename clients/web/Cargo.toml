@@ -13,8 +13,14 @@ jsonwebkey = "0.3.5"
 jsonwebtoken = "9.2.0"
 openssl = { version = "0.10", features = ["vendored"] }
 reqwest = { version = "0.11", features = ["json"] }
-rocket = "0.5.0"
+rocket = { version = "0.5.0", features = ["json"] }
 rocket_oauth2 = "0.5.0"
 serde = "1.0.193"
-serde_json = "1.0.108"
+serde_json = "1.0.113"
 tokio = { version = "1", features = ["full"] }
+uuid = { version = "1.7.0", features = [
+    "v4",
+    "fast-rng",
+    "macro-diagnostics",
+    "serde",
+] }
